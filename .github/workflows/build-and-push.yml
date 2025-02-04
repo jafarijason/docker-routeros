@@ -50,7 +50,7 @@ jobs:
       - name: Build and test if new version
         if: ${{ !contains(steps.docker_hub_tags.outputs.tags, steps.get_routeros_version.outputs.version) }}
         run: |
-          VERSION="${{ steps.get_routeros_version.outputs.version }}"
+          VERSION="7.12.1"
           OWNER="jafarijason"
           REPO="docker-routeros"
           
