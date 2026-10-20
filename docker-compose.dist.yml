@@ -1,22 +1,21 @@
-version: "3"
-
+# Two networks: eth0 for host port mapping (SSH/telnet), eth1 bridged so VM is on routeros_net (containers see each other).
 services:
-  routeros-6-48:
-    image: jafarijason/docker-routeros:6.48.4
-    restart: unless-stopped
-    cap_add:
-      - NET_ADMIN
-    devices:
-      - /dev/net/tun
-      - /dev/kvm
-    ports:
-      - "12222:22"
-      - "12223:23"
-      - "18728:8728"
-      - "18729:8729"
 
-  routeros-latest:
-    image: jafarijason/docker-routeros:latest
+  routeros:
+    # Latest image
+    image: evilfreelancer/docker-routeros:latest
+    # or exact same version
+    #image: evilfreelancer/docker-routeros:7.20.8
+    # or minor version
+    #image: evilfreelancer/docker-routeros:7.20
+    # or major version
+    #image: evilfreelancer/docker-routeros:7
+    # or build from sources
+    #build:
+    #  context: .
+    #  dockerfile: Dockerfile
+    #  args:
+    #    - ROUTEROS_VERSION=7.20.8
     restart: unless-stopped
     cap_add:
       - NET_ADMIN
@@ -24,31 +23,17 @@ services:
       - /dev/net/tun
       - /dev/kvm
     ports:
-      - "22222:22"
-      - "22223:23"
-      - "7777:80"
+      #- "8080:80"
+      - "2222:22"
+      - "2223:23"
       - "8728:8728"
       - "8729:8729"
-      - "28728:8728"
-      - "28729:8729"
+    volumes:
+      - ./routeros_data:/data
+    networks:
+      - default
+      - routeros_net
 
-  routeros-local:
-    image: jafarijason/docker-routeros:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    cap_add:
-      - NET_ADMIN
-    devices:
-      - /dev/net/tun
-      - /dev/kvm
-    ports:
-      - "22222:22"
-      - "22223:23"
-      - "7777:80"
-      - "8728:8728"
-      - "8729:8729"
-      - "28728:8728"
-      - "28729:8729"
-      - "5900:5900"
+networks:
+  routeros_net:
+    driver: bridge
