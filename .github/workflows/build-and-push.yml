@@ -155,7 +155,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push missing images
         run: |
-          VERSION="7.12.1"
+          VERSION="7.23.8"
           OWNER="jafarijason"
           REPO="docker-routeros"
           LIST=missing-versions.txt
